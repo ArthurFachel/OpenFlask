@@ -3,7 +3,8 @@
 ## Pré-requisitos
 
 - Conta na AWS com acesso ao Amazon Lightsail
-- Chave de API do Gemini
+- Chave de API do Gemini (Gratuito)
+- Chave de API do Tavily (Gratuito)
 
 ---
 
@@ -66,12 +67,32 @@ openclaw doctor --fix
    sudo apt update 
    sudo apt install python3
    sudo apt install python3-flask
+   pip install tavily-python --break-system-packages 
+   pip install dotenv --break-system-packages
+   pip install flask-limiter --break-system-packages
 ```
-## Passo 7 — Adicionar o arquivo app.py via nano 
+---
+## Passo 7 - Resgatar sua API KEY do site do Tavily 
+
+Acesse o site do [Tavily](https://app.tavily.com/home) para liberar a WebSearch
+
+---
+## Passo 8 - Criar um arquivo .env
+
+Adicionar sua api key como:
+
+```bash
+TAVILY_API_KEY=
+```
+
+---
+## Passo 9  — Adicionar o arquivo app.py via nano 
 
 ```bash
   nano app.py 
 ```
+
+---
 ## Resultado
 
-Com o gateway aberto, o Flask passa a aceitar conexões de outros computadores na rede. A instância está pronta para uso.
+A instância está pronta para uso.

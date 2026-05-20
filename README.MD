@@ -63,7 +63,7 @@ openclaw doctor --fix
 ---
 ## Passo 6 - Instalar dependencias 
 ```bash
-   apt install upgrade 
+   sudo apt update 
    apt install python3
    apt install flask
 ```

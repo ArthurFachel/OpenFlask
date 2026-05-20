@@ -36,7 +36,7 @@ openclaw onboard
 
 3. Siga as instruções para configurar:
    - O **modelo** desejado
-   - Sua **API Key do Gemini**
+   - Sua **API Key**
 
 ---
 
@@ -55,8 +55,13 @@ openclaw doctor --fix
 ```
 
 ---
+## Passo 5 - Iniciar o Gateway 
+```bash
+   openclaw gateway 
+```
 
-## Passo 5 — Adicionar o arquivo app.py via nano 
+---
+## Passo 6 — Adicionar o arquivo app.py via nano 
 
 ```bash
   nano app.py 

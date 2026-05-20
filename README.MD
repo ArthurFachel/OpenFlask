@@ -61,7 +61,13 @@ openclaw doctor --fix
 ```
 
 ---
-## Passo 6 — Adicionar o arquivo app.py via nano 
+## Passo 6 - Instalar dependencias 
+```bash
+   apt install upgrade 
+   apt install python3
+   apt install flask
+```
+## Passo 7 — Adicionar o arquivo app.py via nano 
 
 ```bash
   nano app.py 

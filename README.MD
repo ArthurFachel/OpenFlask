@@ -67,9 +67,11 @@ openclaw doctor --fix
    sudo apt update 
    sudo apt install python3
    sudo apt install python3-flask
+   sudo apt install python3-pip
    pip install tavily-python --break-system-packages 
    pip install dotenv --break-system-packages
    pip install flask-limiter --break-system-packages
+   pip install sentence-transformers numpy pdfplumber --break-system-packages
 ```
 ---
 ## Passo 7 - Resgatar sua API KEY do site do Tavily 
@@ -93,6 +95,20 @@ TAVILY_API_KEY=
 ```
 
 ---
+
+## Passo 10 — Passe o arquivo para RAG por SCP
+
+Na aba do Lightsail, em Connect, baixe a chave SSH
+
+Abra um terminal no seu computador e digite 
+
+```bash
+  chmod 400 path_para_a_chavessh path_para_o_documento
+```
+```bash
+   scp -i path_para_a_chavessh.pem path_para_o_documento   ubuntu@SEU_IP_LIGHTSAIL:~/docs
+```
+
 ## Resultado
 
 A instância está pronta para uso.

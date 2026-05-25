@@ -111,7 +111,7 @@ Abra um terminal no seu computador e digite
 
 ## Resultado
 
-##Teste a API em um jupyter notebook no VSCODE 
+### Teste a API em um jupyter notebook no VSCODE 
 
 ```bash 
 import requests

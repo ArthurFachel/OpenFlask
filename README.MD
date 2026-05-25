@@ -111,4 +111,20 @@ Abra um terminal no seu computador e digite
 
 ## Resultado
 
-A instância está pronta para uso.
+###Teste a API em um notebook no VSCODE 
+
+```bash 
+   import requests
+
+url = "http://IPV4_DA_MAQUINA:5000/api/message"
+headers = {
+    "Content-Type": "application/json"
+}
+payload = {"query": "",
+           "inner_context": "",
+           "outer_context": "",
+            "search": False,
+            "rag": True}
+response = requests.post(url, json=payload, headers=headers, timeout=120, stream=True)
+print(response.text)
+```

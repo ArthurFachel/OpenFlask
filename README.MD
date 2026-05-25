@@ -111,20 +111,20 @@ Abra um terminal no seu computador e digite
 
 ## Resultado
 
-###Teste a API em um notebook no VSCODE 
+##Teste a API em um jupyter notebook no VSCODE 
 
 ```bash 
-   import requests
+import requests
 
 url = "http://IPV4_DA_MAQUINA:5000/api/message"
 headers = {
     "Content-Type": "application/json"
 }
-payload = {"query": "",
-           "inner_context": "",
-           "outer_context": "",
-            "search": False,
-            "rag": True}
+payload = {"query": "", #pergunta
+           "inner_context": "", #contexto especifico
+           "outer_context": "", #contexto abrangente 
+            "search": False,    #pesquisa na web
+            "rag": True}        #rag de documentos
 response = requests.post(url, json=payload, headers=headers, timeout=120, stream=True)
 print(response.text)
 ```

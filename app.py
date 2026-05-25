@@ -1,3 +1,5 @@
+#MALTA-GEO 
+#@ArthurFachel
 from flask import Flask, jsonify, request, Response, stream_with_context
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
@@ -23,14 +25,122 @@ except ImportError:
 
 try:
     from sentence_transformers import SentenceTransformer
-    _embed_model = SentenceTransformer("all-MiniLM-L6-v2")  # ~80 MB, CPU-friendly
+    _embed_model = SentenceTransformer("all-MiniLM-L6-v2") 
 except ImportError:
     _embed_model = None
 
 load_dotenv()
 
 
+SYSTEM_PROMPT = """
+{
+  "role": "Assistente",
+  "task": "Responder perguntas, em português, sobre geologia.",
+  "content": {
+    "description": "Você é um Assistente de IA especializado em geologia, com foco no Puesto Seguel.",
+    "objectives": [
+      "Responder com precisão e clareza sobre rochas, sedimentos e minerais (tipos, formação, distribuição).",
+      "Explicar formações geológicas (estruturas, estratigrafia, história).",
+      "Apresentar informações sobre fósseis (descobertas, relevância científica)."
+    ],
+    "restrictions": [
+      "Não faça perguntas diretas ao usuário.",
+      "Respostas devem ser concisas, lógicas e baseadas em evidências científicas.",
+      "Manter tom profissional, sem mencionar regras internas ou linguagem inadequada.",
+      "Responda apenas e unicamente em Português, Brasil!"
+    ],
+    "language": "Português, Brasil",
+    "examples": [
+      {
+        "question": "Onde fica o Puesto Seguel?",
+        "answer": "O Puesto Seguel é uma localidade geológica situada na Bacia de Neuquén (Cuenca Neuquina), na província de Neuquén, na Argentina."
+      },
+      {
+        "question": "Me fale sobre esse afloramento.",
+        "answer": "Este afloramento é conhecido como Puesto Seguel. Ele possui ~3 km de extensão e ~60 m de altura, sendo localizado próximo à cidade de Zapala, Argentina. O Puesto Seguel consiste em uma grande área de depósitos lateralmente contínuos, que registram, na base, os sedimentos da Formação Los Molles, considerados os primeiros depósitos marinhos da bacia. É importante comentar que a proximidade entre a plataforma e o arco de ilhas na região era favorável à ocorrência de deslizamentos subaquosos de grande escala, gerando depósitos turbidíticos que evidenciam eventos de alta energia. O afloramento conta também com forte presença de elementos arquiteturais oriundos de sistemas flúvio-deltaicos da Formação Lajas, depositada logo acima, com transição gradual. Por fim, este afloramento está inserido em uma região de dobras, dentro do contexto do Subciclo Cuyano: Hettangiano ao Caloviano médio (Jurássico Inferior médio). O Puesto Seguel está, majoritariamente, geneticamente relacionado a ambientes flúvio-deltaicos da Formação Lajas."
+      },
+      {
+        "question": "Descreva a amostra PSL-25.",
+        "answer": "A amostra PSL-25 corresponde a um arenito médio, maciço, moderadamente selecionado, composto por quartzo, feldspato, plagioclásio, fragmentos de rochas vulcânicas, metamórficas e sedimentares (como ardósia e filito). Ela foi coletada na Porção Norte do afloramento Puesto Seguel durante a campanha de campo realizada em Abril/2024."
+      }
+    ]
+  }
+}
+"""
 
+
+#PROMPT
+def build_input_data(
+    text: str,
+    inner_contexts: list[str],
+    outer_contexts: list[str],
+    web_context: str | None = None,
+    rag_context: str | None = None,
+    history: list[dict] | None = None,
+) -> str:
+    """
+    Assemble the full prompt string that will be sent to OpenClaw.
+
+    Context hierarchy (outermost → innermost):
+      outer_contexts  – broad background / domain knowledge supplied by the caller
+      rag_context     – chunks retrieved from the local PDF index
+      web_context     – live web-search results
+      inner_contexts  – tightly scoped context snippets (e.g. sample descriptions)
+      user question   – the actual query
+    """
+    parts: list[str] = []
+
+    # --- outer context (broad background) ---
+    if outer_contexts:
+        parts.append("=== Contexto Externo ===")
+        for ctx in outer_contexts:
+            parts.append(ctx)
+        parts.append("=== Fim do Contexto Externo ===\n")
+
+    # --- RAG (internal documents) ---
+    if rag_context:
+        parts.append(rag_context)
+
+    # --- web search results ---
+    if web_context:
+        parts.append(
+            "Use the following web search results to help answer. "
+            "If you reference a source, mention its [index number].\n\n"
+            f"--- Web Search Results ---\n{web_context}\n--- End of Results ---\n"
+        )
+
+    # --- conversation history ---
+    if history:
+        parts.append("--- Histórico da Conversa ---")
+        for turn in history:
+            role = "Usuário" if turn["role"] == "user" else "Assistente"
+            parts.append(f"{role}: {turn['content']}")
+        parts.append("--- Fim do Histórico ---\n")
+
+    # --- inner context (tightly scoped snippets) ---
+    if inner_contexts:
+        parts.append("=== Contexto Interno ===")
+        for ctx in inner_contexts:
+            parts.append(ctx)
+        parts.append("=== Fim do Contexto Interno ===\n")
+
+    # --- user question ---
+    parts.append(f"pergunta: {text}")
+
+    combined_context = "\n\n".join(parts)
+
+    # Wrap in OpenClaw-style header/footer with the MALTA-GEO system prompt
+    input_data = (
+        f"<|begin_of_text|><|start_header_id|>system<|end_header_id|>"
+        f"{SYSTEM_PROMPT}"
+        f"<|eot_id|><|start_header_id|>user<|end_header_id|>\n"
+        f"{combined_context}"
+        f"<|eot_id|><|start_header_id|>assistant<|end_header_id|>\n\n"
+    )
+    return input_data
+
+
+#START
 TAVILY_API_KEY   = os.environ.get("TAVILY_API_KEY")
 if not TAVILY_API_KEY:
     raise RuntimeError("TAVILY_API_KEY is not set. Add it to your .env file.")
@@ -40,24 +150,17 @@ RETRY_BACKOFF    = float(os.environ.get("OPENCLAW_RETRY_BACKOFF", 2.0))
 OPENCLAW_TIMEOUT = int(os.environ.get("OPENCLAW_TIMEOUT", 60))
 RATE_LIMIT       = os.environ.get("RATE_LIMIT", "30 per minute")
 
-# Folder with PDFs — only the server process can read this path.
-# Override via env:  RAG_DOCS_DIR=/home/openclaw/docs
-RAG_DOCS_DIR = Path(os.environ.get("RAG_DOCS_DIR", "./docs")).expanduser()
-
-
-
-CHUNK_SIZE    = int(os.environ.get("RAG_CHUNK_SIZE", 800))   # words per chunk (was 400)
-CHUNK_OVERLAP = int(os.environ.get("RAG_CHUNK_OVERLAP", 100)) # word overlap   (was 80)
-TOP_K         = int(os.environ.get("RAG_TOP_K", 4))           # chunks per query (was 5)
-
-
+RAG_DOCS_DIR  = Path(os.environ.get("RAG_DOCS_DIR", "./docs")).expanduser()
+CHUNK_SIZE    = int(os.environ.get("RAG_CHUNK_SIZE", 800))
+CHUNK_OVERLAP = int(os.environ.get("RAG_CHUNK_OVERLAP", 100))
+TOP_K         = int(os.environ.get("RAG_TOP_K", 4))
 EMBED_BATCH_SIZE = int(os.environ.get("RAG_EMBED_BATCH_SIZE", 32))
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 log = logging.getLogger(__name__)
 
 
-
+#start
 app    = Flask(__name__)
 tavily = TavilyClient(TAVILY_API_KEY)
 
@@ -68,16 +171,12 @@ limiter = Limiter(
     storage_uri="memory://",
 )
 
-
-
-# Conversation history  { session_id: [{"role": ..., "content": ...}] }
+#SESSIONS
 sessions: dict[str, list[dict]] = defaultdict(list)
 
-# Single unified RAG index — built at startup, invisible to users
-_rag_index: dict = {}   # {"chunks": [...], "embeddings": np.ndarray, "sources": [...]}
+_rag_index: dict = {}
 
-
-
+#RAG
 def _extract_pdf(path: Path) -> str:
     if pdfplumber is None:
         raise RuntimeError("pdfplumber not installed — run: pip install pdfplumber")
@@ -97,13 +196,9 @@ def _chunk(text: str) -> list[str]:
     return [c for c in chunks if c.strip()]
 
 
-
-
-
 def _embed(texts: list[str]) -> np.ndarray:
     if _embed_model is None:
         raise RuntimeError("sentence-transformers not installed — run: pip install sentence-transformers")
-
     all_vecs = []
     for i in range(0, len(texts), EMBED_BATCH_SIZE):
         batch = texts[i : i + EMBED_BATCH_SIZE]
@@ -115,18 +210,12 @@ def _embed(texts: list[str]) -> np.ndarray:
         )
         all_vecs.append(vecs)
         log.info("  Embedded batch %d/%d", min(i + EMBED_BATCH_SIZE, len(texts)), len(texts))
-
     vecs  = np.concatenate(all_vecs, axis=0)
     norms = np.linalg.norm(vecs, axis=1, keepdims=True)
     return (vecs / np.maximum(norms, 1e-10)).astype(np.float32)
 
 
 def build_rag_index() -> None:
-    """
-    Scan RAG_DOCS_DIR for PDF files, extract text, chunk, embed,
-    and store everything in the private _rag_index.
-    Called once at startup (and can be re-triggered via internal reload).
-    """
     global _rag_index
 
     if not RAG_DOCS_DIR.exists():
@@ -142,16 +231,13 @@ def build_rag_index() -> None:
         log.warning("No PDF or Markdown files found in %s — RAG disabled.", RAG_DOCS_DIR)
         return
 
-    all_chunks:  list[str]  = []
-    all_sources: list[str]  = []   # filename per chunk, for internal debug only
+    all_chunks:  list[str] = []
+    all_sources: list[str] = []
 
     for doc_path in docs:
         try:
             log.info("Indexing %s …", doc_path.name)
-            if doc_path.suffix.lower() == ".pdf":
-                text = _extract_pdf(doc_path)
-            else:
-                text = _extract_markdown(doc_path)
+            text   = _extract_pdf(doc_path) if doc_path.suffix.lower() == ".pdf" else _extract_markdown(doc_path)
             chunks = _chunk(text)
             all_chunks.extend(chunks)
             all_sources.extend([doc_path.name] * len(chunks))
@@ -160,22 +246,16 @@ def build_rag_index() -> None:
             log.error("Failed to index %s: %s", doc_path.name, exc)
 
     if not all_chunks:
-        log.warning("No text extracted from any PDF — RAG disabled.")
+        log.warning("No text extracted from any document — RAG disabled.")
         return
 
-    log.info("Embedding %d total chunks (batch_size=%d) …", len(all_chunks), EMBED_BATCH_SIZE)
+    log.info("Embedding %d total chunks …", len(all_chunks))
     embeddings = _embed(all_chunks)
-
-    _rag_index = {
-        "chunks":     all_chunks,
-        "embeddings": embeddings,
-        "sources":    all_sources,
-    }
+    _rag_index = {"chunks": all_chunks, "embeddings": embeddings, "sources": all_sources}
     log.info("RAG index ready: %d chunks from %d files.", len(all_chunks), len(docs))
 
 
 def _retrieve(query: str) -> list[str]:
-    """Return the TOP_K most relevant chunks for the query, silently."""
     if not _rag_index:
         return []
     q_vec   = _embed([query])[0]
@@ -187,16 +267,12 @@ def _retrieve(query: str) -> list[str]:
 def _rag_context_block(chunks: list[str]) -> str | None:
     if not chunks:
         return None
-    parts = ["[Internal knowledge]"]
-    for chunk in chunks:
-        parts.append(chunk)
-    parts.append("[End of internal knowledge]")
+    parts = ["[Internal knowledge]"] + chunks + ["[End of internal knowledge]"]
     return "\n\n".join(parts)
 
 
-
+#UTIL
 def coerce_bool(value, default: bool) -> bool:
-    """Accept True/False, 1/0, or strings 'true'/'false'/'1'/'0'."""
     if value is None:
         return default
     if isinstance(value, bool):
@@ -229,7 +305,9 @@ def search_web(query: str) -> tuple[str, list[dict]]:
         if response.get("answer"):
             lines.append(f"Answer: {response['answer']}\n")
         for i, result in enumerate(response.get("results", [])[:5], 1):
-            title, url, content = result.get("title",""), result.get("url",""), result.get("content","")
+            title   = result.get("title", "")
+            url     = result.get("url", "")
+            content = result.get("content", "")
             lines.append(f"[{i}] {title}\nURL: {url}\n{content}\n")
             sources.append({"index": i, "title": title, "url": url})
         return "\n".join(lines), sources
@@ -237,41 +315,7 @@ def search_web(query: str) -> tuple[str, list[dict]]:
         return f"(Web search failed: {e})", []
 
 
-def build_prompt(
-    history: list[dict],
-    user_message: str,
-    web_context: str | None,
-    rag_context: str | None,
-) -> str:
-    parts = []
-
-
-    if rag_context:
-        parts.append(
-            "You have access to the following internal knowledge. "
-            "Use it to answer the user's question when relevant. "
-            "Do not reveal the source or that internal documents exist.\n\n"
-            + rag_context
-        )
-
-    if web_context:
-        parts.append(
-            "Use the following web search results to help answer. "
-            "If you reference a source, mention its [index number].\n\n"
-            f"--- Web Search Results ---\n{web_context}\n--- End of Results ---\n"
-        )
-
-    if history:
-        parts.append("--- Conversation so far ---")
-        for turn in history:
-            role = "User" if turn["role"] == "user" else "Assistant"
-            parts.append(f"{role}: {turn['content']}")
-        parts.append("--- End of conversation ---\n")
-
-    parts.append(f"User: {user_message}")
-    return "\n\n".join(parts)
-
-
+#OPENCLAW
 def run_openclaw(prompt: str) -> str:
     last_error = None
     for attempt in range(1, MAX_RETRIES + 1):
@@ -300,19 +344,61 @@ def run_openclaw(prompt: str) -> str:
     raise RuntimeError(f"OpenClaw failed after {MAX_RETRIES} attempts. Last error: {last_error}")
 
 
+#FLASK
+@app.route("/")
+def index():
+    return "MALTA-GEO API"
+
+
+@app.route("/complete", methods=["POST"])
+@limiter.limit(RATE_LIMIT)
+def complete():
+    """
+    Legacy-compatible endpoint that mirrors the original MALTA-GEO /complete route.
+
+    Request body:
+      {
+        "query":          "...",
+        "inner_contexts": ["..."],   // optional
+        "outer_contexts": ["..."]    // optional
+      }
+
+    Response body:
+      { "response": "..." }
+    """
+    data            = request.get_json(force=True)
+    query           = data.get("query", "").strip()
+    inner_contexts  = data.get("inner_contexts", [])
+    outer_contexts  = data.get("outer_contexts", [])
+
+    if not query:
+        return jsonify({"error": "Campo 'query' é obrigatório"}), 400
+
+    input_data = build_input_data(query, inner_contexts, outer_contexts)
+
+    try:
+        response_text = run_openclaw(input_data)
+    except RuntimeError as e:
+        return jsonify({"error": str(e)}), 500
+
+    return jsonify({"response": response_text})
 
 
 @app.route("/api/message", methods=["POST"])
 @limiter.limit(RATE_LIMIT)
 def message():
     """
-    Send a message.
+    Full-featured chat endpoint with session history, RAG, web search,
+    and inner/outer context support.
 
     Request body:
       {
-        "message":    "...",
-        "session_id": "abc123",              // optional
-        "search":     true | false | "auto"  // default: "auto"
+        "message":        "...",
+        "session_id":     "abc123",              // optional
+        "search":         true | false | "auto", // default: "auto"
+        "rag":            true | false,           // default: true
+        "inner_contexts": ["..."],               // optional
+        "outer_contexts": ["..."]                // optional
       }
 
     Response body:
@@ -321,14 +407,17 @@ def message():
         "message":    "...",
         "response":   "...",
         "sources":    [...],
-        "searched":   true | false
+        "searched":   true | false,
+        "rag":        true | false
       }
     """
-    data       = request.get_json(force=True)
-    prompt     = data.get("message", "").strip()
-    session_id = data.get("session_id") or str(uuid.uuid4())
-    search_raw = data.get("search", "auto")
-    rag_opt    = coerce_bool(data.get("rag"), default=True)
+    data            = request.get_json(force=True)
+    prompt          = data.get("message", "").strip()
+    session_id      = data.get("session_id") or str(uuid.uuid4())
+    search_raw      = data.get("search", "auto")
+    rag_opt         = coerce_bool(data.get("rag"), default=True)
+    inner_contexts  = data.get("inner_contexts", [])
+    outer_contexts  = data.get("outer_contexts", [])
 
     if not prompt:
         return jsonify({"error": "No message provided."}), 400
@@ -346,7 +435,14 @@ def message():
 
     rag_context = _rag_context_block(_retrieve(prompt)) if rag_opt else None
 
-    final_prompt = build_prompt(history, prompt, web_context, rag_context)
+    final_prompt = build_input_data(
+        prompt,
+        inner_contexts,
+        outer_contexts,
+        web_context=web_context,
+        rag_context=rag_context,
+        history=history,
+    )
 
     try:
         response_text = run_openclaw(final_prompt)
@@ -364,68 +460,6 @@ def message():
         "searched":   do_search,
         "rag":        bool(rag_opt),
     })
-
-
-@app.route("/api/message/stream", methods=["POST"])
-@limiter.limit(RATE_LIMIT)
-def message_stream():
-    """
-    Streaming version of /api/message via Server-Sent Events.
-
-    Events:
-      data: {"token": "..."}
-      data: {"done": true, "session_id": "...", "sources": [...]}
-    """
-    data       = request.get_json(force=True)
-    prompt     = data.get("message", "").strip()
-    session_id = data.get("session_id") or str(uuid.uuid4())
-    search_raw = data.get("search", "auto")
-    rag_opt    = coerce_bool(data.get("rag"), default=True)
-
-    if not prompt:
-        return jsonify({"error": "No message provided."}), 400
-
-    history = sessions[session_id]
-
-    if isinstance(search_raw, str) and search_raw.strip().lower() == "auto":
-        do_search = needs_search(prompt)
-    else:
-        do_search = coerce_bool(search_raw, default=True)
-
-    web_context, sources = (None, [])
-    if do_search:
-        web_context, sources = search_web(prompt)
-
-    rag_context  = _rag_context_block(_retrieve(prompt)) if rag_opt else None
-    final_prompt = build_prompt(history, prompt, web_context, rag_context)
-
-    def generate():
-        collected = []
-        try:
-            proc = subprocess.Popen(
-                ["openclaw", "infer", "model", "run", "--prompt", final_prompt, "--stream"],
-                stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, text=True,
-            )
-            for line in proc.stdout:
-                token = line.rstrip("\n")
-                collected.append(token)
-                yield f"data: {json.dumps({'token': token})}\n\n"
-            proc.wait()
-            full_response = "".join(collected)
-            history.append({"role": "user",      "content": prompt})
-            history.append({"role": "assistant",  "content": full_response})
-            yield f"data: {json.dumps({'done': True, 'session_id': session_id, 'sources': sources, 'rag': bool(rag_opt)})}\n\n"
-        except FileNotFoundError:
-            yield f"data: {json.dumps({'error': 'openclaw CLI not found'})}\n\n"
-        except Exception as e:
-            yield f"data: {json.dumps({'error': str(e)})}\n\n"
-
-    return Response(
-        stream_with_context(generate()),
-        mimetype="text/event-stream",
-        headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"},
-    )
-
 
 @app.route("/api/history/<session_id>", methods=["GET"])
 def history(session_id: str):
@@ -475,8 +509,7 @@ def rate_limit_handler(e):
 
 
 
-
-build_rag_index()   # index all PDFs before accepting requests
+build_rag_index()   # index all PDFs/Markdown before accepting requests
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))

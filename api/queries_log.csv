@@ -1,0 +1,8 @@
+timestamp,user_id,session_id,query,inner_contexts,outer_contexts,num_inner_contexts,num_outer_contexts,history_turns
+2026-06-08T17:20:46.402709,malta_1,sess_HCP6QoP4tcsKyjqtXoczgA,Onde fica a Bacia do Araripe?,,,0,0,0
+2026-06-08T17:21:07.363151,malta_1,sess___pMcQBqv6Ocxz33zJ2w6w,Onde fica a Bacia do Araripe?,,,0,0,0
+2026-06-08T17:21:13.329711,malta_1,sess_cXZQhj8xX2ELfZB_C8TjJQ,Onde fica a Bacia do Araripe?,,,0,0,0
+2026-06-08T17:22:29.681581,malta_1,sess_zNqb3ZQ96hw9VO6ItRKMAA,Descreva as principais unidades estratigráficas da Bacia do Araripe.,,,0,0,0
+2026-06-08T17:23:00.745679,malta_1,sess_GaBdBoEf3_ym9S1ty9Kohw,Descreva as principais unidades estratigráficas da Bacia do Araripe.,,,0,0,0
+2026-06-08T17:23:40.283769,malta_1,sess_tl0NqgiT34TYCQLAgeNQVg,Descreva as principais unidades estratigráficas da Bacia do Araripe.,,,0,0,0
+2026-06-08T17:23:55.661289,malta_1,sess_Gqsp8ekwtofpbvhBt0AJLg,Descreva as principais unidades estratigráficas da Bacia do Araripe.,,,0,0,0

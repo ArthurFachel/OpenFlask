@@ -1,0 +1,156 @@
+{
+  "sessions": {
+    "sess_8Ewh15O-t6JqKl8dDi0W5Q": {
+      "session_id": "sess_8Ewh15O-t6JqKl8dDi0W5Q",
+      "user_id": "malta_1",
+      "created_at": "2026-06-08T20:17:36.283368+00:00",
+      "updated_at": "2026-06-08T20:17:42.225525+00:00",
+      "history": [
+        {
+          "role": "user",
+          "content": "Onde fica a Bacia do Araripe?"
+        },
+        {
+          "role": "assistant",
+          "content": "\n\nA Bacia do Araripe está localizada no Nordeste do Brasil, abrangendo áreas dos estados do Ceará, Pernambuco e Piauí. Situa-se no interior da região Nordeste, na porção sul do Ceará, e é delimitada pela Chapada do Araripe, um planalto de relevo proeminente. Sua localização estratégica a torna uma das bacias sedimentares mais estudadas do país, especialmente por seu registro geológico e paleontológico excepcional."
+        }
+      ]
+    },
+    "sess_l-YsoIC0JytFBXOGj6FJ6g": {
+      "session_id": "sess_l-YsoIC0JytFBXOGj6FJ6g",
+      "user_id": "malta_1",
+      "created_at": "2026-06-08T20:18:37.077104+00:00",
+      "updated_at": "2026-06-08T20:18:56.409254+00:00",
+      "history": [
+        {
+          "role": "user",
+          "content": "Onde fica a Bacia do Araripe?"
+        },
+        {
+          "role": "assistant",
+          "content": "\n\nA Bacia do Araripe está localizada no Nordeste do Brasil, abrangendo áreas dos estados do Ceará, Pernambuco e Piauí. Sua principal feição geográfica é a Chapada do Araripe, um planalto sedimentar que se destaca na região. A bacia situa-se em uma área interiorana, distante do litoral, com coordenadas aproximadas entre 7°S e 7,5°S de latitude e 39,5°W a 40,5°W de longitude. É reconhecida por seu relevante registro geológico e paleontológico."
+        },
+        {
+          "role": "user",
+          "content": "Onde fica a Bacia do Araripe?"
+        },
+        {
+          "role": "assistant",
+          "content": "\n\nA Bacia do Araripe está situada no Nordeste do Brasil, abrangendo porções dos estados do Ceará, Pernambuco e Piauí. Sua principal característica geográfica é a Chapada do Araripe, um planalto sedimentar proeminente na região. Localiza-se em uma área interiorana, com coordenadas aproximadas entre 7°S e 7,5°S de latitude e 39,5°W a 40,5°W de longitude. A bacia é internacionalmente reconhecida por seu excepcional registro geológico e paleontológico, especialmente pelos fósseis do Cretáceo preservados em suas formações."
+        }
+      ]
+    },
+    "sess_HCP6QoP4tcsKyjqtXoczgA": {
+      "session_id": "sess_HCP6QoP4tcsKyjqtXoczgA",
+      "user_id": "malta_1",
+      "created_at": "2026-06-08T20:20:46.402370+00:00",
+      "updated_at": "2026-06-08T20:20:49.649126+00:00",
+      "history": [
+        {
+          "role": "user",
+          "content": "Onde fica a Bacia do Araripe?"
+        },
+        {
+          "role": "assistant",
+          "content": "\n\nA Bacia do Araripe está localizada no Nordeste do Brasil, abrangendo áreas dos estados do Ceará, Pernambuco e Piauí. Sua porção central é marcada pela Chapada do Araripe, um planalto sedimentar que se destaca na região. A bacia ocupa uma área de aproximadamente 8.000 km², situada no interior do Nordeste, distante da zona costeira."
+        }
+      ]
+    },
+    "sess___pMcQBqv6Ocxz33zJ2w6w": {
+      "session_id": "sess___pMcQBqv6Ocxz33zJ2w6w",
+      "user_id": "malta_1",
+      "created_at": "2026-06-08T20:21:07.362798+00:00",
+      "updated_at": "2026-06-08T20:21:10.654529+00:00",
+      "history": [
+        {
+          "role": "user",
+          "content": "Onde fica a Bacia do Araripe?"
+        },
+        {
+          "role": "assistant",
+          "content": "\n\nA Bacia do Araripe está localizada no Nordeste do Brasil, abrangendo partes dos estados do Ceará, Pernambuco e Piauí. Sua área central situa-se na região da Chapada do Araripe, um planalto sedimentar conhecido por sua relevância geológica e paleontológica, especialmente pelos registros fossilíferos excepcionais do Cretáceo."
+        }
+      ]
+    },
+    "sess_cXZQhj8xX2ELfZB_C8TjJQ": {
+      "session_id": "sess_cXZQhj8xX2ELfZB_C8TjJQ",
+      "user_id": "malta_1",
+      "created_at": "2026-06-08T20:21:13.329304+00:00",
+      "updated_at": "2026-06-08T20:21:20.464499+00:00",
+      "history": [
+        {
+          "role": "user",
+          "content": "Onde fica a Bacia do Araripe?"
+        },
+        {
+          "role": "assistant",
+          "content": "\n\nA Bacia do Araripe está localizada na região Nordeste do Brasil, abrangendo partes dos estados do Ceará, Pernambuco e Piauí. Situa-se no interior do Planalto da Borborema, ocupando uma área de aproximadamente 8.000 km². Sua porção mais conhecida é o Chapadão do Araripe, um relevo tabular que se destaca na paisagem semiárida da região."
+        }
+      ]
+    },
+    "sess_zNqb3ZQ96hw9VO6ItRKMAA": {
+      "session_id": "sess_zNqb3ZQ96hw9VO6ItRKMAA",
+      "user_id": "malta_1",
+      "created_at": "2026-06-08T20:22:29.681140+00:00",
+      "updated_at": "2026-06-08T20:22:40.409744+00:00",
+      "history": [
+        {
+          "role": "user",
+          "content": "Descreva as principais unidades estratigráficas da Bacia do Araripe."
+        },
+        {
+          "role": "assistant",
+          "content": "\n\nA Bacia do Araripe é composta por unidades estratigráficas que refletem sua evolução geológica, desde o rifteamento no Jurássico até a sedimentação pós-rifte no Cretáceo. As principais unidades, em ordem estratigráfica (da mais antiga à mais recente), são:\n\n1. **Grupo Brejo Santo (Cariri)**:  \n   - **Formação Cariri (Conglomerado Base)**: Rochas conglomeráticas e arenitos grossos, associados a ambientes aluviais e fluviais, marcando a fase inicial de rifteamento.\n\n2. **Grupo Araripe**:  \n   - **Formação Missão Velha**: Arenitos avermelhados e conglomerados, depositados em sistemas fluviais e lacustres, com registros de fósseis de plantas.  \n   - **Formação Abaiara**: Argilitos e siltitos, indicando ambientes lacustres mais profundos.\n\n3. **Grupo Santana (destaque fossilífero)**:  \n   - **Formação Crato**: Calcários laminados (folhelhos calcários) depositados em ambiente lacustre raso, famosos por fósseis excepcionais de insetos, plantas e vertebrados (ex.: pterossauros).  \n   - **Formação Ipubi**: Evaporitos (gipsita e anidrita), formados em condições áridas com restrita conexão marinha.  \n   - **Formação Romualdo**: Argilitos, siltitos e calcários nodulares com concreções fossilíferas, contendo fósseis de peixes, répteis (ex.: *Araripemys*) e crustáceos, indicando influência marinha.\n\n4. **Formação Exu**:  \n   - Arenitos grossos e conglomerados, depositados em sistemas fluviais, marcando o preenchimento final da bacia.\n\n**Contexto geológico**: Essas unidades representam a transição de ambientes riftados (Jurássico) para bacias interiores com lagos e influências marinhas episódicas (Cretáceo Inferior), culminando em sistemas continentais fluviais. A Bacia do Araripe é internacionalmente reconhecida pela preservação de fósseis em *Lagerstätten* (especialmente nas formações Crato e Romualdo), crucial para estudos paleontológicos e paleoambientais."
+        }
+      ]
+    },
+    "sess_GaBdBoEf3_ym9S1ty9Kohw": {
+      "session_id": "sess_GaBdBoEf3_ym9S1ty9Kohw",
+      "user_id": "malta_1",
+      "created_at": "2026-06-08T20:23:00.745061+00:00",
+      "updated_at": "2026-06-08T20:23:11.967357+00:00",
+      "history": [
+        {
+          "role": "user",
+          "content": "Descreva as principais unidades estratigráficas da Bacia do Araripe."
+        },
+        {
+          "role": "assistant",
+          "content": "\n\nA Bacia do Araripe apresenta uma sequência estratigráfica dividida em unidades que refletem diferentes ambientes deposicionais e eras geológicas. As principais unidades, **da base para o topo**, são:\n\n1. **Formação Cariri (Jurássico Inferior)**:  \n   Composta por rochas vulcânicas e vulcanoclásticas (basaltos e tufos), associadas ao rifteamento durante a abertura do Atlântico Sul.\n\n2. **Formação Missão Velha (Jurássico Superior)**:  \n   Constituída por conglomerados, arenitos avermelhados e siltitos, depositados em ambientes fluviais e lacustres. Contém registros de dinossauros e plantas.\n\n3. **Formação Abaiara (Jurássico Superior a Cretáceo Inferior)**:  \n   Camadas siltosas e arenosas, interpretadas como depósitos de planície de inundação em clima semiárido.\n\n4. **Grupo Santana (Cretáceo Inferior)**:  \n   - **Formação Crato**: Calcários laminados, folhelhos e margas, famosos por fósseis excepcionalmente preservados (insetos, plantas e vertebrados) em ambiente lacustre.  \n   - **Formação Ipubi**: Evaporitos (gipsita e halita), indicando períodos de aridez e restrição marinha.  \n   - **Formação Romualdo**: Arenitos, folhelhos e calcários nodulares com fósseis de peixes, pterossauros e crocodilomorfos, em ambientes costeiros e lagunares.\n\n5. **Formação Exu (Cretáceo Superior)**:  \n   Arenitos grossos e conglomerados, depositados em sistemas fluviais entrelaçados, marcando o preenchimento final da bacia.\n\n**Relevância**: A estratigrafia da bacia é crucial para entender a evolução paleoambiental do Nordeste brasileiro, além de abrigar um dos mais importantes registros fossilíferos do mundo, especialmente do Cretáceo."
+        }
+      ]
+    },
+    "sess_tl0NqgiT34TYCQLAgeNQVg": {
+      "session_id": "sess_tl0NqgiT34TYCQLAgeNQVg",
+      "user_id": "malta_1",
+      "created_at": "2026-06-08T20:23:40.283186+00:00",
+      "updated_at": "2026-06-08T20:23:49.511261+00:00",
+      "history": [
+        {
+          "role": "user",
+          "content": "Descreva as principais unidades estratigráficas da Bacia do Araripe."
+        },
+        {
+          "role": "assistant",
+          "content": "\n\nA Bacia do Araripe possui uma coluna estratigráfica dividida em unidades que refletem diferentes ambientes deposicionais e eventos geológicos. As principais unidades, da base para o topo (mais antigas para mais recentes), são:\n\n1. **Grupo Cariri (Paleozoico)**:  \n   - Composto por rochas sedimentares paleozoicas, como folhelhos e arenitos, associadas a ambientes continentais e marinhos rasos.  \n   - Inclui formações como **Brejo Santo** e **Missão Velha** (este último, em parte, também atribuído ao Mesozoico em algumas interpretações).\n\n2. **Grupo Araripe (Mesozoico, Cretáceo Inferior)**:  \n   - **Formação Rio da Batateira (ou Barbalha)**: Depósitos lacustres e deltaicos, com folhelhos e calcários.  \n   - **Formação Santana**: Subdividida em três membros principais:  \n     - **Membro Crato**: Calcários laminados com fósseis excepcionais (insetos, pterossauros e plantas).  \n     - **Membro Ipubi**: Evaporitos (gipsita e halita), indicando condições áridas e restrição marinha.  \n     - **Membro Romualdo**: Folhelhos e calcários com nódulos carbonáticos contendo fósseis de peixes, répteis (como *Araripemys*) e crustáceos.  \n\n3. **Formação Exu (Cretáceo Superior)**:  \n   - Arenitos grossos e conglomerados, depositados em ambientes fluviais e eólicos, marcando o retorno a condições continentais áridas.  \n\n**Contexto geológico**: Essas unidades registram a evolução da bacia desde ambientes lacustres e lagunares (com influência marinha episódica) até sistemas fluviais, refletindo subsidência tectônica e variações climáticas durante o Cretáceo. A Formação Santana, em particular, é internacionalmente reconhecida por sua fossilização em *Lagerstätte*, preservando detalhes anatômicos únicos."
+        }
+      ]
+    },
+    "sess_Gqsp8ekwtofpbvhBt0AJLg": {
+      "session_id": "sess_Gqsp8ekwtofpbvhBt0AJLg",
+      "user_id": "malta_1",
+      "created_at": "2026-06-08T20:23:55.660686+00:00",
+      "updated_at": "2026-06-08T20:24:06.910982+00:00",
+      "history": [
+        {
+          "role": "user",
+          "content": "Descreva as principais unidades estratigráficas da Bacia do Araripe."
+        },
+        {
+          "role": "assistant",
+          "content": "\n\nA Bacia do Araripe, localizada no Nordeste do Brasil, possui uma estratigrafia dividida em três grupos principais, organizados da base (mais antiga) para o topo (mais recente):\n\n### 1. **Grupo Cariri (Jurássico Superior a Cretáceo Inferior)**  \n   - **Formação Brejo Santo**: Rochas clásticas (conglomerados e arenitos) depositadas em ambientes fluviais e aluviais.  \n   - **Formação Missão Velha**: Arenitos grossos e conglomerados, associados a sistemas fluviais entrelaçados.  \n   - **Formação Abaiara**: Folhelhos e siltitos, indicando ambientes lacustres ou de planície de inundação.  \n\n### 2. **Grupo Araripina (Cretáceo Inferior)**  \n   - **Formação Crato**: Calcários laminados e folhelhos betuminosos, famosos por fósseis excepcionalmente preservados (insetos, plantas e vertebrados) em ambiente lacustre de águas estratificadas.  \n   - **Formação Ipubi**: Evaporitos (gipsita e anidrita) intercalados com folhelhos, refletindo um lago raso com alta evaporação.  \n   - **Formação Romualdo**: Calcários nodulares fossilíferos, contendo fósseis de peixes, pterossauros e crocodilomorfos, depositados em ambiente marinho raso ou lagunar.  \n\n### 3. **Grupo Exu (Cretáceo Superior)**  \n   - **Formação Exu**: Arenitos avermelhados com estratificação cruzada, depositados em sistemas fluviais e dunas eólicas, marcando o retorno a condições continentais áridas.  \n\n### Contexto Geológico:  \nA sequência reflete uma transição de ambientes continentais (Grupo Cariri) para lacustres/evaporíticos (Grupo Araripina) e, finalmente, fluviais-aeólicos (Grupo Exu). A Bacia do Araripe é internacionalmente reconhecida pelos fósseis do Grupo Araripina, especialmente da Formação Santana (termo às vezes usado para abranger partes do Crato e Romualdo), que oferecem insights sobre ecossistemas do Cretáceo."
+        }
+      ]
+    }
+  }
+}
